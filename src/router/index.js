@@ -1,30 +1,20 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/pages/HelloWorld'
-import Users from '@/pages/Users'
-import Edit from '@/pages/Edit'
-import Add from '@/pages/Add'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-Vue.use(Router)
+import Index from '@/pages/Index.vue';
+import UserEdit from '@/pages/UserEdit.vue';
+import UserAdd from '@/pages/UserAdd.vue';
+import Table from '@/pages/Table.vue';
+
+Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
+  linkActiveClass: 'active',
   routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
-      path: '/users',
-      component: Users
-    },
-    {
-      path: '/edit/:id',
-      component: Edit
-    },
-    {
-      path: '/add',
-      component: Add
-    }
-  ]
-})
+    { path: '/', component: Index },
+    { path: '/list', component: Table },
+    { path: '/user/add', component: UserAdd },
+    { path: '/user/:id', component: UserEdit, props: true },
+  ],
+});

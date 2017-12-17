@@ -22,12 +22,12 @@
                 Главная
               </a>
             </router-link>
-            <router-link tag="li" active-class="active" to="/users" exact>
+            <router-link tag="li" active-class="active" to="/list" exact>
               <a>
                 Список пользователей
               </a>
             </router-link>
-            <router-link tag="li" active-class="active" to="/add" exact>
+            <router-link tag="li" active-class="active" to="/user/add" exact>
               <a>
                 Добавление пользователя
               </a>
@@ -56,6 +56,6 @@ export default {
 
 <style>
 #app {
-  margin-top: 40px;
+  margin-top: 60px;
 }
 </style>
