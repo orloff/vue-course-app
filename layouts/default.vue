@@ -12,7 +12,7 @@
             <span class="icon-bar"></span>
           </button>
           <router-link to="/" class="navbar-brand">
-            Vue.js course app
+            {{ layoutTitle }}
           </router-link>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -45,6 +45,19 @@
 
   </div>
 </template>
+
+<script>
+export default {
+  name: 'app',
+  computed: {
+    // Заголовок страницы из хранилища Vuex
+    // который будет на всех страницах
+    layoutTitle () {
+      return this.$store.state.navbarTitle
+    }
+  }
+};
+</script>
 
 <style>
 #app {
