@@ -1,21 +1,30 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "./views/Home.vue";
-import About from "./views/About.vue";
+import Vue from 'vue'
+import Router from 'vue-router'
+import Index from '@/pages/index.vue'
+import Users from '@/pages/users.vue'
+import Edit from '@/pages/edit.vue'
+import Add from '@/pages/add.vue'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
-      path: "/",
-      name: "home",
-      component: Home
+      path: '/',
+      component: Index
     },
     {
-      path: "/about",
-      name: "about",
-      component: About
+      path: '/users',
+      component: Users
+    },
+    {
+      path: '/edit/:id',
+      component: Edit
+    },
+    {
+      path: '/add',
+      component: Add
     }
   ]
-});
+})
