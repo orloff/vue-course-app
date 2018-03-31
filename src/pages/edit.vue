@@ -9,7 +9,12 @@
     </div>
     <user-form
       v-else
-      :user="user"/>
+      :user="user"
+      @input="value => user = value"
+    />
+
+    <pre>{{ user }}</pre>
+
   </div>
 </template>
 
@@ -28,16 +33,19 @@ export default {
       user: null
     }
   },
+  computed: {
+    id() {
+      return this.$route.params.id
+    }
+  },
   mounted: function() {
     this.loadData()
   },
   methods: {
     loadData: function() {
-      var self = this
-
-      axios.get('/db.json').then(function(response) {
+      axios.get('/db.json').then(({ data }) => {
         // Для примера просто выбираем одного пользователя
-        self.user = response.data.users[0]
+        this.user = data.users.find(item => item.id === parseInt(this.id, 10))
       })
     }
   }

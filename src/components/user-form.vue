@@ -3,53 +3,51 @@
 
     <div class="form-group">
       <label>Имя</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        v-model="user.firstName" >
+      <input
+        type="text"
+        class="form-control"
+        v-model="localUser.firstName">
     </div>
 
     <div class="form-group">
       <label>Фамилия</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        v-model="user.lastName" >
+      <input
+        type="text"
+        class="form-control"
+        v-model="localUser.lastName">
     </div>
 
     <div class="form-group">
       <label>Баланс</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        v-model="user.balance" >
+      <input
+        type="text"
+        class="form-control"
+        v-model="localUser.balance">
     </div>
 
     <div class="form-group">
       <label>Телефон</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        v-model="user.phone" >
+      <input
+        type="text"
+        class="form-control"
+        v-model="localUser.phone">
     </div>
 
     <div class="form-group">
       <label>Адрес</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        v-model="user.address" >
+      <input
+        type="text"
+        class="form-control"
+        v-model="localUser.address">
     </div>
 
     <div class="form-group">
       <label>Компания</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        v-model="user.company" >
+      <input
+        type="text"
+        class="form-control"
+        v-model="localUser.company">
     </div>
-
-    <pre>{{ user }}</pre>
 
   </div>
 </template>
@@ -63,6 +61,24 @@ export default {
       type: Object,
       required: true
     }
+  },
+  data: () => ({
+    // Локальный изменяемый объект пользователя
+    localUser: null
+  }),
+  watch: {
+    // При изменении локального состояния
+    // отправляем объект наверх
+    localUser: {
+      deep: true,
+      handler() {
+        this.$emit('input', this.localUser)
+      }
+    }
+  },
+  created() {
+    // Копируем пользователя в локальное состояние
+    this.localUser = Object.assign({}, this.user)
   }
 }
 </script>
