@@ -2,14 +2,18 @@
   <div>
     <h2>Добавление пользователя</h2>
 
-    <div 
-      v-if="!user" 
+    <div
+      v-if="!user"
       class="alert alert-warning">
       Загрузка...
     </div>
-    <user-form 
-      v-else 
-      :user="user"/>
+    <user-form
+      v-else
+      :user="user"
+      @input="value => user = value"
+    />
+
+    <pre>{{ user }}</pre>
   </div>
 </template>
 

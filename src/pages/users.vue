@@ -2,13 +2,13 @@
   <div>
     <h2>Список пользователей</h2>
 
-    <div 
-      v-if="!users.length" 
+    <div
+      v-if="!users.length"
       class="alert alert-warning">
       Загрузка...
     </div>
-    <user-list 
-      v-else 
+    <user-list
+      v-else
       :users="users"/>
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     loadData() {
-      axios.get('db.json').then(({ data }) => {
+      axios.get('/db.json').then(({ data }) => {
         this.users = data.users
       })
     }

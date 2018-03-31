@@ -2,13 +2,13 @@
   <div>
     <h2>Редактирование пользователя</h2>
 
-    <div 
-      v-if="!user" 
+    <div
+      v-if="!user"
       class="alert alert-warning">
       Загрузка...
     </div>
-    <user-form 
-      v-else 
+    <user-form
+      v-else
       :user="user"/>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
     loadData: function() {
       var self = this
 
-      axios.get('db.json').then(function(response) {
+      axios.get('/db.json').then(function(response) {
         // Для примера просто выбираем одного пользователя
         self.user = response.data.users[0]
       })
