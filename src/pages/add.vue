@@ -1,15 +1,15 @@
 <!-- Компонент добавления нового пользователя -->
 
 <template>
-  <div class="panel panel-primary">
-    <div class="panel-heading">
+  <div class="card">
+    <div class="card-header">
       <span class="pull-right">
         Новый пользователь
       </span>
 
       Пользователь
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 
       <user-form v-model="user">
         <div slot="buttons">
