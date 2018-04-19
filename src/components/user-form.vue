@@ -123,9 +123,7 @@
 
     <div class="form-group">
       <label>Биография</label>
-      <textarea
-        class="form-control"
-        v-model="localUser.about"/>
+      <rich-editor v-model="localUser.about" />
     </div>
 
     <div class="form-group">
@@ -156,7 +154,8 @@ export default {
   inject: ['$validator'],
   components: {
     Datepicker: () => import('@/components/datepicker.vue'),
-    AvatarUploader: () => import('@/components/avatar-uploader.vue')
+    AvatarUploader: () => import('@/components/avatar-uploader.vue'),
+    RichEditor: () => import('@/components/rich-editor.vue')
   },
   model: {
     prop: 'user'
