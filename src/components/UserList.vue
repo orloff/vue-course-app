@@ -1,59 +1,135 @@
+<!-- Компонент таблицы -->
+
 <template>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Имя</th>
-        <th>Фамилия</th>
-        <th>Активен</th>
-        <th>Баланс</th>
-        <th>Email</th>
-        <th>Телефон</th>
-        <th>Зарегистрирован</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="item in users"
-        :key="item.id">
-        <td>
-          <router-link :to="'/edit/' + item.id">
-            # {{ item.id }}
-          </router-link>
-        </td>
-        <td>{{ item.firstName }}</td>
-        <td>{{ item.lastName }}</td>
-        <td>{{ item.isActive }}</td>
-        <td>{{ item.balance }}</td>
-        <td>{{ item.email }}</td>
-        <td>{{ item.phone }}</td>
-        <td>{{ item.registered }}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th colspan="8">
-          Всего пользователей: {{ total }}
-        </th>
-      </tr>
-    </tfoot>
-  </table>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <button 
+        type="button" 
+        class="pull-right btn btn-xs btn-default btn-outline" 
+        @click="loadData">
+        <i :class="['fa fa-fw fa-refresh', loading ? 'fa-spin' : '']"/>
+        Обновить таблицу
+      </button>
+      {{ title }} &ndash; {{ totalRows }}
+    </div>
+    <div class="panel-body">
+
+      <div class="form-group">
+        <div class="col-md-2">
+          <rows-picker v-model.number="rowsPerPage" />
+        </div>
+        <div class="col-md-4">
+          <p class="form-control-static">
+            Выбрано элементов на страницу {{ rowsPerPage }}
+          </p>
+        </div>
+      </div>
+
+      <table 
+        ref="table" 
+        class="table table-striped">
+        <thead>
+          <slot name="header"/>
+        </thead>
+        <tbody>
+          <tr 
+            v-for="item in filteredRows" 
+            :key="item.id">
+            <slot 
+              name="row" 
+              v-bind="item"/>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="form-group">
+        <strong>Выбрана страница {{ selectedPage }}</strong>
+        <rows-paginator 
+          v-model.number="selectedPage" 
+          :per-page="rowsPerPage" 
+          :total="totalRows" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+// Используемые плагины
+import axios from 'axios'
+
+// Используемые компоненты
+import RowsPicker from './Dashboard/RowsPerPage.vue'
+import RowsPaginator from './Dashboard/RowsPaginator.vue'
+
 export default {
-  name: 'UsersTable',
+  name: 'DashboardGrid',
+  components: {
+    RowsPicker,
+    RowsPaginator
+  },
   props: {
-    // Список пользователей
-    users: {
-      type: Array,
+    // Заголовок таблицы
+    title: {
+      type: String,
+      default: 'Таблица'
+    },
+
+    // URL загрузки списка
+    url: {
+      type: String,
       required: true
     }
   },
+  data: () => ({
+    // Список для таблицы
+    list: [],
+
+    // Количество строк на страницу
+    rowsPerPage: 5,
+
+    // Отображаемая страница
+    selectedPage: 1,
+
+    // Флаг обновления данных
+    loading: false
+  }),
   computed: {
-    // Общее количество пользователей
-    total: function() {
-      return this.users.length
+    // Количество строк в таблице
+    totalRows() {
+      return this.list.length
+    },
+
+    // Отображаемые строки таблицы
+    filteredRows() {
+      return this.list.filter((item, index) => {
+        const startIndex = (this.selectedPage - 1) * this.rowsPerPage
+        const finalIndex = startIndex + this.rowsPerPage
+
+        return startIndex <= index && index < finalIndex
+      })
+    }
+  },
+  watch: {
+    // При изменении количества элементов на страницу
+    rowsPerPage() {
+      this.selectedPage = 1
+    }
+  },
+  mounted() {
+    this.loadData()
+  },
+  methods: {
+    // Загрузка данных таблицы
+    loadData() {
+      this.loading = true
+
+      axios
+        .get(this.url)
+        .then(response => response.data)
+        .then(response => {
+          this.list = response
+          this.loading = false
+        })
     }
   }
 }

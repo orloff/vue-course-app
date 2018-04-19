@@ -1,32 +1,48 @@
+<!-- Компонент добавления нового пользователя -->
+
 <template>
-  <div>
-    <h2>Добавление пользователя</h2>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <span class="pull-right">
+        Новый пользователь
+      </span>
 
-    <div
-      v-if="!user"
-      class="alert alert-warning">
-      Загрузка...
+      Пользователь
     </div>
-    <user-form
-      v-else
-      :user="user"
-      @input="value => user = value"
-    />
+    <div class="panel-body">
 
-    <pre>{{ user }}</pre>
+      <user-form v-model="user">
+        <div slot="buttons">
+          <button
+            type="button"
+            class="btn btn-success"
+            @click="save"
+          >
+            Создать пользователя
+          </button>
+        </div>
+      </user-form>
+
+    </div>
   </div>
 </template>
 
 <script>
+// Используемые плагины
+import axios from 'axios'
+
+// Используемые компоненты
 import UserForm from '@/components/user-form.vue'
 
-const emptyObj = {
-  id: 0,
+// Модель для пустого пользователя
+const defaultUser = {
+  id: null,
+  guid: '',
   isActive: false,
   balance: '',
-  picture: '',
+  picture: 'http://placehold.it/128x128',
   age: 0,
-  accessLevel: '',
+  eyeColor: '',
   firstName: '',
   lastName: '',
   company: '',
@@ -38,22 +54,36 @@ const emptyObj = {
 }
 
 export default {
-  name: 'AddUserPage',
+  name: 'UserAdd',
   components: {
-    'user-form': UserForm
+    UserForm
   },
-  data: function() {
-    return {
-      // Пользователь
-      user: null
-    }
-  },
-  mounted: function() {
-    this.loadData()
-  },
+  data: () => ({
+    // Редактируемый пользователь
+    user: defaultUser,
+
+    //  REST URL
+    url: 'http://localhost:3004/users/'
+  }),
   methods: {
-    loadData: function() {
-      this.user = Object.assign({}, emptyObj)
+    // Сохранение изменений
+    save() {
+      // Валидация пользователя через vee-validate
+      // внутри формы мы инъектируем $validator
+      this.$validator.validateAll()
+      if (this.errors.any()) {
+        // eslint-disable-next-line
+        alert('Не все поля заполнены!')
+        return
+      }
+
+      axios.post(this.url, this.user).then(() => {
+        // После успешного создания пользователя
+        // переходим на страницу с таблицей
+        // или можно перейти на страницу редактирования
+        // так как в ответе приходит тот же объект, но с ID
+        this.$router.push({ path: '/users' })
+      })
     }
   }
 }
