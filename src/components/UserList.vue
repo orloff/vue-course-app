@@ -1,18 +1,18 @@
 <!-- Компонент таблицы -->
 
 <template>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <button 
-        type="button" 
-        class="pull-right btn btn-xs btn-default btn-outline" 
+  <div class="card">
+    <div class="card-header">
+      <button
+        type="button"
+        class="float-right btn btn-sm btn-primary btn-outline"
         @click="loadData">
         <i :class="['fa fa-fw fa-refresh', loading ? 'fa-spin' : '']"/>
         Обновить таблицу
       </button>
       {{ title }} &ndash; {{ totalRows }}
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 
       <div class="form-group">
         <div class="col-md-2">
@@ -25,18 +25,18 @@
         </div>
       </div>
 
-      <table 
-        ref="table" 
+      <table
+        ref="table"
         class="table table-striped">
         <thead>
           <slot name="header"/>
         </thead>
         <tbody>
-          <tr 
-            v-for="item in filteredRows" 
+          <tr
+            v-for="item in filteredRows"
             :key="item.id">
-            <slot 
-              name="row" 
+            <slot
+              name="row"
               v-bind="item"/>
           </tr>
         </tbody>
@@ -44,9 +44,9 @@
 
       <div class="form-group">
         <strong>Выбрана страница {{ selectedPage }}</strong>
-        <rows-paginator 
-          v-model.number="selectedPage" 
-          :per-page="rowsPerPage" 
+        <rows-paginator
+          v-model.number="selectedPage"
+          :per-page="rowsPerPage"
           :total="totalRows" />
       </div>
     </div>
