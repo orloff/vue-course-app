@@ -29,7 +29,9 @@
 
     <div class="form-group">
       <label>URL картинки</label>
-      <avatar-uploader v-model="user.picture" />
+      <no-ssr>
+        <avatar-uploader v-model="user.picture" />
+      </no-ssr>
     </div>
 
     <div class="form-group">
@@ -94,11 +96,11 @@
 
 <script>
 // Используемые плагины
-import Vue from 'vue';
-import VeeValidate from 'vee-validate';
+import Vue from 'vue'
+import VeeValidate from 'vee-validate'
 
 // Подключаем vee-validate
-Vue.use(VeeValidate);
+Vue.use(VeeValidate)
 
 export default {
   name: 'UserForm',
@@ -110,7 +112,7 @@ export default {
   },
   model: {
     // Настраиваем компоненту работу с v-model
-    prop: 'user',
+    prop: 'user'
   },
   props: {
     // Пользователь
@@ -122,5 +124,5 @@ export default {
   data: () => ({
     accessList: ['guest', 'user', 'admin']
   })
-};
+}
 </script>

@@ -18,7 +18,7 @@
           <th>Телефон</th>
           <th>Зарегистрирован</th>
         </tr>
-        <template slot="row" scope="props">
+        <template slot="row" slot-scope="props">
           <td>
             <router-link :to="`/user/${props.id}`"># {{ props.id }}</router-link>
           </td>
@@ -46,5 +46,5 @@ export default {
     // URL загрузки списка пользователей
     url: 'http://localhost:3004/users/'
   })
-};
+}
 </script>

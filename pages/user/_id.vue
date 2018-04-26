@@ -34,21 +34,29 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
-import UserForm from '~/components/UserForm.vue';
+import UserForm from '~/components/UserForm.vue'
 
 export default {
   name: 'UserEdit',
   components: {
     UserForm
   },
+  asyncData({ params }) {
+    return axios
+      .get(`http://localhost:3004/users/${params.id}`)
+      .then(response => response.data)
+      .then(response => {
+        return { user: response }
+      })
+  },
   data: () => ({
     // Объект с данными редактируемого пользователя
     user: null,
 
     // REST URL
-    restUrl: 'http://localhost:3004/users/',
+    restUrl: 'http://localhost:3004/users/'
   }),
   computed: {
     id() {
@@ -64,12 +72,8 @@ export default {
     title() {
       return !this.user.firstName || !this.user.lastName
         ? 'Пользователь'
-        : [
-          this.user.firstName,
-          this.user.lastName,
-          this.user.phone,
-        ].join(' ');
-    },
+        : [this.user.firstName, this.user.lastName, this.user.phone].join(' ')
+    }
   },
   watch: {
     // Обновление данных при изменениях маршрута
@@ -79,11 +83,12 @@ export default {
   methods: {
     // Загрузка данных пользователя
     loadData() {
-      axios.get(this.url)
+      axios
+        .get(this.url)
         .then(response => response.data)
-        .then((response) => {
-          this.user = response;
-        });
+        .then(response => {
+          this.user = response
+        })
     },
 
     // Сохранение изменений
@@ -94,33 +99,31 @@ export default {
       if (this.errors.any()) {
         // eslint-disable-next-line
         alert('Не все поля заполнены!')
-        return;
+        return
       }
 
       // После обновления перекидываем на страницу с таблицей
-      axios.patch(this.url, this.user)
-        .then(() => {
-          this.$router.push({ path: '/list' });
-        });
+      axios.patch(this.url, this.user).then(() => {
+        this.$router.push({ path: '/list' })
+      })
     },
 
     // Удаление пользователя
     remove() {
       // eslint-disable-next-line
-      const confirmed = confirm('Удалить пользователя?');
+      const confirmed = confirm('Удалить пользователя?')
       if (!confirmed) {
-        return;
+        return
       }
 
       // После удаления перекидываем на страницу с таблицей
-      axios.delete(this.url)
-        .then(() => {
-          this.$router.push({ path: '/list' });
-        });
-    },
+      axios.delete(this.url).then(() => {
+        this.$router.push({ path: '/list' })
+      })
+    }
   },
   mounted() {
-    this.loadData();
-  },
-};
+    this.loadData()
+  }
+}
 </script>
